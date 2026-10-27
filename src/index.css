@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg: #f8f7f4;
+    --ink: #1a1a1a;
+    --accent: #000000;
+    --ink-faint: rgba(26, 26, 26, 0.6);
+    --border: #dcdad5;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg);
+    color: var(--ink);
+  }
+  
+  .font-mono,
+  .mono,
+  .tabular-nums {
+    font-family: 'Space Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .font-serif,
+  .serif {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+}
+
+.label-mono {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+}
+
+/* Custom minimal scrollbar for financial broadsheet */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f0ec;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c9c7c0;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8e8c85;
+}

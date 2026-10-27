@@ -1,0 +1,6 @@
+{
+  "name": "B3 & Global Alpha: Terminal de Ações, IPOs & Portfólio",
+  "description": "Plataforma profissional para análise de ações e IPOs, cotações e gráficos em tempo real, relatórios técnicos, notícias e execução de ordens com simulador de portfólio.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
