@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Search, 
   ArrowUpRight, 
   ArrowDownRight, 
   BarChart3, 
-  Bell
+  Bell,
+  Filter,
+  ArrowLeftRight
 } from 'lucide-react';
 import { StockQuote } from '../types/market';
+import { StockComparator } from './StockComparator';
 
 interface StockListProps {
   stocks: StockQuote[];
@@ -26,9 +29,24 @@ export const StockList: React.FC<StockListProps> = ({
   onOpenTechnicalReport
 }) => {
   const [filterType, setFilterType] = useState<string>('ALL');
+  const [selectedSector, setSelectedSector] = useState<string>('ALL');
+  const [showComparator, setShowComparator] = useState<boolean>(true);
+  const [compareA, setCompareA] = useState<string>('PETR4');
+  const [compareB, setCompareB] = useState<string>('VALE3');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [sortField, setSortField] = useState<'change' | 'volume' | 'dy' | 'price'>('volume');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+
+  // B3 & Global sector options for high-precision filtering
+  const sectorOptions = useMemo(() => [
+    { id: 'ALL', label: 'Todos os Setores B3 / Globais', match: '' },
+    { id: 'Bancos', label: 'Bancos & Finanças (ITUB, BBAS, B3SA, NU)', match: 'Financeiro' },
+    { id: 'Energia', label: 'Petróleo, Gás & Energia (PETR, PRIO)', match: 'Petróleo' },
+    { id: 'Mineracao', label: 'Mineração & Commodities (VALE)', match: 'Mineração' },
+    { id: 'Industrial', label: 'Bens Industriais & Motores (WEGE)', match: 'Industriais' },
+    { id: 'Consumo', label: 'Consumo, Varejo & Locação (RENT)', match: 'Consumo' },
+    { id: 'Tecnologia', label: 'Tecnologia & Inovação (NVDA, AAPL)', match: 'Tecnologia' },
+  ], []);
 
   const filteredStocks = stocks.filter(stock => {
     const matchesSearch = 
@@ -37,6 +55,15 @@ export const StockList: React.FC<StockListProps> = ({
       stock.sector.toLowerCase().includes(searchQuery.toLowerCase());
 
     if (!matchesSearch) return false;
+
+    // Sector Filter
+    if (selectedSector !== 'ALL') {
+      const option = sectorOptions.find(o => o.id === selectedSector);
+      const matchKeyword = option ? option.match : selectedSector;
+      if (!stock.sector.toLowerCase().includes(matchKeyword.toLowerCase())) {
+        return false;
+      }
+    }
 
     if (filterType === 'B3') return stock.exchange === 'B3';
     if (filterType === 'GLOBAL') return stock.exchange === 'NYSE' || stock.exchange === 'NASDAQ';
@@ -57,52 +84,121 @@ export const StockList: React.FC<StockListProps> = ({
   return (
     <div className="space-y-6">
       
-      {/* Title & Search bar */}
-      <div className="border-b border-[#1a1a1a] pb-4 flex flex-col md:flex-row md:items-baseline justify-between gap-4">
+      {/* Title & Controls Bar */}
+      <div className="border-b border-[#1a1a1a] pb-4 flex flex-col lg:flex-row lg:items-baseline justify-between gap-4">
         <div>
           <h2 className="font-serif italic text-3xl font-bold text-[#1a1a1a]">
             Mercado &amp; Ações
           </h2>
           <div className="label-mono mt-1">
-            Painel Geral de Cotações B3 &amp; Wall Street
+            Painel Geral de Cotações B3 &amp; Wall Street ({filteredStocks.length} de {stocks.length} ativos)
           </div>
         </div>
 
-        {/* Search */}
-        <div className="relative w-full md:w-80">
-          <Search className="w-3.5 h-3.5 text-[#1a1a1a]/50 absolute left-3 top-2.5" />
-          <input
-            type="text"
-            placeholder="Buscar por código ou nome..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-white border border-[#dcdad5] pl-9 pr-3 py-1.5 text-xs font-mono text-[#1a1a1a] placeholder:text-[#1a1a1a]/40 focus:outline-none focus:border-[#1a1a1a]"
-          />
+        {/* Search & Sector Dropdown Filter */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full lg:w-auto">
+          {/* Sector Selector Dropdown */}
+          <div className="relative flex items-center">
+            <Filter className="w-3.5 h-3.5 text-[#1a1a1a]/60 absolute left-2.5 pointer-events-none" />
+            <select
+              value={selectedSector}
+              onChange={(e) => setSelectedSector(e.target.value)}
+              className="w-full sm:w-auto bg-white border border-[#1a1a1a] pl-8 pr-7 py-1.5 text-xs font-mono font-medium text-[#1a1a1a] focus:outline-none focus:ring-1 focus:ring-[#1a1a1a] appearance-none cursor-pointer hover:bg-[#fcfbf9] transition-colors"
+              title="Filtrar por Setor da B3"
+            >
+              {sectorOptions.map((opt) => {
+                const count = opt.id === 'ALL'
+                  ? stocks.length
+                  : stocks.filter(s => s.sector.toLowerCase().includes(opt.match.toLowerCase())).length;
+                return (
+                  <option key={opt.id} value={opt.id}>
+                    {opt.id === 'ALL' ? 'Todos os Setores' : opt.label.split('(')[0].trim()} ({count})
+                  </option>
+                );
+              })}
+            </select>
+            <span className="absolute right-2.5 pointer-events-none text-[9px] text-[#1a1a1a]/60">▼</span>
+          </div>
+
+          {/* Comparator Toggle Button */}
+          <button
+            onClick={() => setShowComparator(!showComparator)}
+            className={`px-3 py-1.5 border text-xs font-mono font-bold uppercase transition-colors flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap ${
+              showComparator
+                ? 'bg-[#1a1a1a] text-[#f8f7f4] border-[#1a1a1a]'
+                : 'bg-white hover:bg-[#f1f0ec] text-[#1a1a1a] border-[#1a1a1a]'
+            }`}
+            title="Comparador Lateral de Ativos"
+          >
+            <ArrowLeftRight className="w-3.5 h-3.5" />
+            <span>{showComparator ? 'Ocultar Comparador' : 'Comparar Ativos'}</span>
+          </button>
+
+          {/* Search Box */}
+          <div className="relative w-full sm:w-60">
+            <Search className="w-3.5 h-3.5 text-[#1a1a1a]/50 absolute left-3 top-2.5" />
+            <input
+              type="text"
+              placeholder="Buscar por código ou nome..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-white border border-[#dcdad5] pl-9 pr-3 py-1.5 text-xs font-mono text-[#1a1a1a] placeholder:text-[#1a1a1a]/40 focus:outline-none focus:border-[#1a1a1a]"
+            />
+          </div>
         </div>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto text-xs font-mono pb-1">
-        {[
-          { id: 'ALL', label: 'Todos os Ativos' },
-          { id: 'B3', label: 'B3 Ações' },
-          { id: 'GLOBAL', label: 'Globais' },
-          { id: 'GAINS', label: 'Maiores Altas' },
-          { id: 'LOSSES', label: 'Maiores Baixas' },
-          { id: 'DIVIDENDS', label: 'Top Dividendos (DY ≥ 6%)' },
-        ].map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setFilterType(tab.id)}
-            className={`px-3 py-1.5 transition-colors cursor-pointer border ${
-              filterType === tab.id
-                ? 'bg-[#1a1a1a] text-white border-[#1a1a1a] font-bold'
-                : 'bg-white text-[#1a1a1a]/70 border-[#dcdad5] hover:border-[#1a1a1a]'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+      {/* Side-by-Side Asset Comparator Component */}
+      {showComparator && (
+        <StockComparator
+          stocks={stocks}
+          initialTickerA={compareA}
+          initialTickerB={compareB}
+          onSelectStock={onSelectStock}
+          onOpenOrderModal={onOpenOrderModal}
+        />
+      )}
+
+      {/* Filter Tabs & Active Sector Indicator */}
+      <div className="space-y-2">
+        <div className="flex items-center gap-2 overflow-x-auto text-xs font-mono pb-1">
+          {[
+            { id: 'ALL', label: 'Todos os Ativos' },
+            { id: 'B3', label: 'B3 Ações' },
+            { id: 'GLOBAL', label: 'Globais' },
+            { id: 'GAINS', label: 'Maiores Altas' },
+            { id: 'LOSSES', label: 'Maiores Baixas' },
+            { id: 'DIVIDENDS', label: 'Top Dividendos (DY ≥ 6%)' },
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setFilterType(tab.id)}
+              className={`px-3 py-1.5 transition-colors cursor-pointer border whitespace-nowrap ${
+                filterType === tab.id
+                  ? 'bg-[#1a1a1a] text-white border-[#1a1a1a] font-bold'
+                  : 'bg-white text-[#1a1a1a]/70 border-[#dcdad5] hover:border-[#1a1a1a]'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Active Sector Chip */}
+        {selectedSector !== 'ALL' && (
+          <div className="flex items-center gap-2 text-xs font-mono bg-emerald-50 border border-emerald-300 px-3 py-1 text-emerald-950">
+            <span className="w-2 h-2 rounded-full bg-emerald-600 inline-block" />
+            <span>
+              Setor selecionado: <strong>{sectorOptions.find(o => o.id === selectedSector)?.label}</strong>
+            </span>
+            <button
+              onClick={() => setSelectedSector('ALL')}
+              className="text-xs text-emerald-900 underline hover:opacity-70 ml-auto font-bold cursor-pointer"
+            >
+              Limpar filtro de setor
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Stock Quotes Table */}
@@ -246,6 +342,17 @@ export const StockList: React.FC<StockListProps> = ({
                           Vender
                         </button>
                         <button
+                          onClick={() => {
+                            setCompareB(stock.ticker);
+                            setShowComparator(true);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          title={`Comparar ${stock.ticker} no painel lateral`}
+                          className="p-1 border border-[#dcdad5] hover:border-[#1a1a1a] hover:bg-[#1a1a1a] hover:text-[#f8f7f4] text-[#1a1a1a] transition-colors"
+                        >
+                          <ArrowLeftRight className="w-3.5 h-3.5" />
+                        </button>
+                        <button
                           onClick={() => onOpenTechnicalReport(stock)}
                           title="Análise Técnica"
                           className="p-1 border border-[#dcdad5] hover:border-[#1a1a1a] text-[#1a1a1a] transition-colors"
@@ -267,6 +374,27 @@ export const StockList: React.FC<StockListProps> = ({
               })}
             </tbody>
           </table>
+
+          {filteredStocks.length === 0 && (
+            <div className="py-12 px-4 text-center bg-white border-t border-[#dcdad5]">
+              <p className="font-serif italic text-lg text-[#1a1a1a] mb-1 font-bold">
+                Nenhum ativo encontrado para os filtros selecionados
+              </p>
+              <p className="text-xs font-mono text-[#1a1a1a]/60 mb-4">
+                Tente selecionar outro setor da B3 ou limpar os termos de busca.
+              </p>
+              <button
+                onClick={() => {
+                  setSelectedSector('ALL');
+                  setFilterType('ALL');
+                  setSearchQuery('');
+                }}
+                className="px-4 py-2 bg-[#1a1a1a] hover:bg-black text-[#f8f7f4] font-mono text-xs font-bold uppercase transition-colors cursor-pointer"
+              >
+                Limpar Filtros &amp; Ver Todos
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

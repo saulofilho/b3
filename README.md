@@ -31,22 +31,43 @@ Uma plataforma profissional inspirada no design broadsheet editorial financeiro 
   * Comparativo direto com benchmarks: **IBOVESPA** e **Taxa CDI (11,25% a.a.)**.
   * Filtros de tempo: `1M`, `3M`, `6M`, `1A`, `TUDO`.
   * Tooltips customizados no padrão visual do terminal com mark-to-market diário.
+* **Gráfico de Rosca de Alocação por Setor (Recharts Doughnut):**
+  * Distribuição percentual do patrimônio alocado por setor da B3 (Petróleo, Financeiro, Mineração, Tecnologia, etc.).
+  * Total de capital posicionado, caixa líquido e valor monetário por setor.
+* **Módulo de Backtesting & Simulação Histórica vs. IBOV:**
+  * Simulação de retornos retroativos com seleção de períodos: **1M**, **3M**, **6M (Semestral)**, **1A** e **2A**.
+  * Estratégias pré-definidas ou personalizadas (*Minha Carteira Atual*, *Top Dividendos B3*, *Barbell B3 + Tech Global*, *Quality & Alpha Growth*).
+  * Confronto gráfico direto da curva de capital contra o **IBOVESPA (IBOV)** e **CDI Acumulado**.
+  * Métricas quantitativas de risco: **Alpha Gerado (% e bps)**, **Índice Sharpe**, **Max Drawdown (Queda Máxima)**, **Volatilidade Anualizada** e **Taxa de Acerto (Win Rate)**.
+  * Tabela de atribuição de retorno com retorno individual de cada ativo no período e contribuição ponderada.
+  * Parecer quantitativo analítico automatizado do comportamento da estratégia.
+* **Calendário de Dividendos & JCP da Carteira:**
+  * Listagem completa de datas "ex" de corte e calendários de pagamento previstos para os ativos mantidos em carteira.
+  * Projeção automática de renda passiva total em R$ (Líquido e Bruto) com base na custódia atual do investidor (`Qtd em Carteira × Provento por Ação`).
+  * Discriminação tributária entre Dividendos (isentos de IR) e Juros sobre Capital Próprio - JCP (com alíquota de 15% na fonte calculada automaticamente).
+  * Painel de fluxo de caixa mensal com créditos programados por mês/ano.
+  * Filtros dinâmicos por tipo (Todos, Dividendos, JCP), por mês de crédito e modo radar (Minha Carteira vs. Radar Geral B3).
+  * Acesso rápido para compra adicional de cotas antes da Data-Com.
 * **Estatísticas da Carteira:** Rentabilidade acumulada (%), P&L do dia, Patrimônio total e Caixa líquido disponível.
 * **Gestão de Estratégias:** Classificação de posições em *Dividend Yield & Valor*, *Quality Growth*, *Swing Trade Médias* e *IPOs*.
 * **Aporte e Reset:** Ferramenta para injetar capital de teste (`+R$ 10.000`) ou restaurar o portfólio para o capital inicial (R$ 100.000).
 
-### 5. Análise Especializada de Dividend Yield (DY)
+### 5. Comparador de Ativos & Filtro Setorial
+* **Filtro Setorial B3:** Dropdown no topo da lista de ações para filtrar papéis por setores específicos (Petróleo & Gás, Financeiro, Mineração & Siderurgia, Bens Industriais, etc.).
+* **Comparador Lateral de Ativos:** Seleção de 2 ativos simultâneos com tabela de métricas consolidadas (Cotação, Variação Dia, Dividend Yield, P/L, ROE, Volume, Beta, Recomendação de Consenso).
+
+### 6. Análise Especializada de Dividend Yield (DY)
 * **DY Anualizado (12 Meses):** Coluna dedicada na tabela de ações com ordenação rápida e badge *Top Yield*.
 * **Projeção de Renda Passiva:**
   * Estimativa monetária de provento por ação (`R$ / ação`).
   * Projeção de fluxo de caixa para lote padrão de 100 ações.
   * Comparativo percentual contra o rendimento da taxa básica Selic.
 
-### 6. Roteamento & Integração com Corretoras (DMA2 / FIX)
+### 7. Roteamento & Integração com Corretoras (DMA2 / FIX)
 * **Hub de Conexão:** Suporte a corretoras nacionais e globais (**XP Investimentos**, **BTG Pactual**, **NuInvest**, **Clear** e **Interactive Brokers**).
 * **Boleta Completa:** Ordens a Mercado, Limite e Stop Loss com cálculo automático de emolumentos B3 (0,03%) e corretagem zero.
 
-### 7. Feed de Notícias Financeiras & Alertas
+### 8. Feed de Notícias Financeiras & Alertas
 * Notícias em tempo real com categorização macro, corporativa e IPOs.
 * Sistema de alertas sonoros e visuais configuráveis por cotação (acima ou abaixo do preço-alvo).
 

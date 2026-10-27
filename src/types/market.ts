@@ -213,3 +213,21 @@ export interface NewsArticle {
   readTime: string;
   author: string;
 }
+
+export type DividendType = 'DIVIDENDO' | 'JCP' | 'RENDIMENTO';
+export type DividendStatus = 'CONFIRMADO' | 'PREVISTO' | 'PAGO';
+
+export interface DividendEvent {
+  id: string;
+  ticker: string;
+  assetName: string;
+  type: DividendType;
+  valuePerShare: number;
+  netValuePerShare: number;
+  exDate: string;
+  paymentDate: string;
+  status: DividendStatus;
+  approvedDate?: string;
+  notes?: string;
+}
+

@@ -8,7 +8,8 @@ import {
   AppNotification,
   Candle,
   TechnicalReport,
-  TechnicalBias
+  TechnicalBias,
+  DividendEvent
 } from '../types/market';
 
 export const INITIAL_STOCKS: StockQuote[] = [
@@ -946,3 +947,150 @@ export function getTechnicalReportForStock(stock: StockQuote): TechnicalReport {
     generatedAt: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
   };
 }
+
+export const INITIAL_DIVIDENDS: DividendEvent[] = [
+  {
+    id: 'div-petr4-1',
+    ticker: 'PETR4',
+    assetName: 'Petrobras PN',
+    type: 'DIVIDENDO',
+    valuePerShare: 1.352,
+    netValuePerShare: 1.352, // Isento de IR
+    exDate: '14/11/2026',
+    paymentDate: '28/11/2026',
+    status: 'CONFIRMADO',
+    approvedDate: '24/10/2026',
+    notes: 'Dividendos intercalares referentes ao resultado do 3T26 conforme política de remuneração aos acionistas.'
+  },
+  {
+    id: 'div-itub4-1',
+    ticker: 'ITUB4',
+    assetName: 'Itaú Unibanco PN',
+    type: 'JCP',
+    valuePerShare: 0.284,
+    netValuePerShare: 0.2414, // Líquido de 15% IR
+    exDate: '18/11/2026',
+    paymentDate: '04/12/2026',
+    status: 'CONFIRMADO',
+    approvedDate: '20/10/2026',
+    notes: 'Juros sobre Capital Próprio trimestral com retenção de 15% de imposto de renda na fonte para pessoa física.'
+  },
+  {
+    id: 'div-wege3-1',
+    ticker: 'WEGE3',
+    assetName: 'WEG ON',
+    type: 'JCP',
+    valuePerShare: 0.178,
+    netValuePerShare: 0.1513,
+    exDate: '24/11/2026',
+    paymentDate: '16/12/2026',
+    status: 'CONFIRMADO',
+    approvedDate: '26/10/2026',
+    notes: 'JCP complementar deliberado pelo Conselho de Administração imputado aos dividendos obrigatórios de 2026.'
+  },
+  {
+    id: 'div-prio3-1',
+    ticker: 'PRIO3',
+    assetName: 'PRIO ON',
+    type: 'DIVIDENDO',
+    valuePerShare: 0.625,
+    netValuePerShare: 0.625,
+    exDate: '02/12/2026',
+    paymentDate: '18/12/2026',
+    status: 'PREVISTO',
+    approvedDate: '05/11/2026',
+    notes: 'Proposta preliminar de proventos extraordinários derivados de geração excedente de fluxo de caixa livre.'
+  },
+  {
+    id: 'div-petr4-2',
+    ticker: 'PETR4',
+    assetName: 'Petrobras PN',
+    type: 'JCP',
+    valuePerShare: 0.448,
+    netValuePerShare: 0.3808,
+    exDate: '11/12/2026',
+    paymentDate: '29/12/2026',
+    status: 'CONFIRMADO',
+    approvedDate: '24/10/2026',
+    notes: 'Segunda parcela da remuneração aos acionistas aprovada pelo Conselho de Administração.'
+  },
+  {
+    id: 'div-itub4-2',
+    ticker: 'ITUB4',
+    assetName: 'Itaú Unibanco PN',
+    type: 'DIVIDENDO',
+    valuePerShare: 0.820,
+    netValuePerShare: 0.820,
+    exDate: '08/01/2027',
+    paymentDate: '26/01/2027',
+    status: 'PREVISTO',
+    approvedDate: 'Previsto em AGO',
+    notes: 'Dividendo anual extraordinário estimado com base na expansão do índice de Basileia e lucros do exercício.'
+  },
+  {
+    id: 'div-wege3-2',
+    ticker: 'WEGE3',
+    assetName: 'WEG ON',
+    type: 'DIVIDENDO',
+    valuePerShare: 0.295,
+    netValuePerShare: 0.295,
+    exDate: '15/01/2027',
+    paymentDate: '12/02/2027',
+    status: 'PREVISTO',
+    approvedDate: 'Proposta Diretoria',
+    notes: 'Dividendo semestral estatutário decorrente do fechamento de balanço de 2026.'
+  },
+  {
+    id: 'div-vale3-1',
+    ticker: 'VALE3',
+    assetName: 'Vale S.A.',
+    type: 'JCP',
+    valuePerShare: 1.845,
+    netValuePerShare: 1.568,
+    exDate: '26/11/2026',
+    paymentDate: '18/12/2026',
+    status: 'CONFIRMADO',
+    approvedDate: '28/10/2026',
+    notes: 'JCP semestral relativo ao fluxo operacional de minério de ferro e metais para transição energética.'
+  },
+  {
+    id: 'div-bbas3-1',
+    ticker: 'BBAS3',
+    assetName: 'Banco do Brasil ON',
+    type: 'DIVIDENDO',
+    valuePerShare: 0.865,
+    netValuePerShare: 0.865,
+    exDate: '21/11/2026',
+    paymentDate: '05/12/2026',
+    status: 'CONFIRMADO',
+    approvedDate: '25/10/2026',
+    notes: 'Dividendo antecipado com base no payout estatutário de 45% do lucro líquido ajustado.'
+  },
+  {
+    id: 'div-b3sa3-1',
+    ticker: 'B3SA3',
+    assetName: 'B3 S.A. - Brasil, Bolsa, Balcão',
+    type: 'JCP',
+    valuePerShare: 0.088,
+    netValuePerShare: 0.0748,
+    exDate: '06/11/2026',
+    paymentDate: '30/11/2026',
+    status: 'CONFIRMADO',
+    approvedDate: '15/10/2026',
+    notes: 'Juros sobre Capital Próprio do 3º trimestre fiscal de 2026.'
+  },
+  {
+    id: 'div-rent3-1',
+    ticker: 'RENT3',
+    assetName: 'Localiza Rent a Car',
+    type: 'JCP',
+    valuePerShare: 0.362,
+    netValuePerShare: 0.3077,
+    exDate: '27/11/2026',
+    paymentDate: '15/12/2026',
+    status: 'CONFIRMADO',
+    approvedDate: '22/10/2026',
+    notes: 'JCP complementar aprovado pelo conselho e vinculado à otimização da estrutura de capital corporativa.'
+  }
+];
+
