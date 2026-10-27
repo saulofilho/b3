@@ -7,6 +7,7 @@ import {
   RotateCcw
 } from 'lucide-react';
 import { SimulatedPortfolio, StockQuote } from '../types/market';
+import { PortfolioEquityChart } from './PortfolioEquityChart';
 
 interface PortfolioSimulatorProps {
   portfolio: SimulatedPortfolio;
@@ -76,6 +77,9 @@ export const PortfolioSimulator: React.FC<PortfolioSimulatorProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Top Section: Recharts Historical Equity Growth Chart */}
+      <PortfolioEquityChart portfolio={portfolio} />
 
       {/* 4 Financial Metrics Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
